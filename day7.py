@@ -57,16 +57,17 @@ def execute(p,args):
         elif opcode == "jmpF":
             pc = op2 if op1 == 0 else pc + 3                
         elif opcode == "inp":
-            while args == []:
-                pass
+            if args == []:
+                return -1
             inp = args.pop(0)
             p[p[int(pc+1)]] = inp # int(input("input:"))
-            # print(f"input: {inp}")
+            print(f"input: {inp}")
             pc +=2
         elif opcode == "out":
-            # print(f"output:{op1}")
+            print(f"output:{op1}")
             output = copy.deepcopy(op1)
             pc += 2
+            return output
         else:
             break
     if done:
@@ -78,39 +79,56 @@ def execute(p,args):
     return output
 
 
-f = open("day7.input","r")
-programB =  f.readline().split(",")
+# f = open("day7.input","r")
+# programB =  f.readline().split(",")
+# programB = list(map(lambda x: int(x),programB))
+
+# outputs = []
+
+# for combo in itertools.permutations([0,1,2,3,4], 5):  # 2 for pairs, 3 for 
+#     config = list(combo)
+#     # print(config)
+#     output = 0
+#     for i in range(0,5):
+#         # print(f"execute amp {i}")
+#         program = programB[:]
+#         args = [config.pop(0),output]
+#         output = execute(program,args)    
+#     # print(output)
+#     outputs.append(output)
+
+# print(f"Part 1: max: {max(outputs)}")
+
+
+
+
+
+programB =  "3,26,1001,26,-4,26,3,27,1002,27,2,27,1,27,26,27,4,27,1001,28,-1,28,1005,28,6,99,0,0,5".split(",")
 programB = list(map(lambda x: int(x),programB))
-
 outputs = []
 
-for combo in itertools.permutations([0,1,2,3,4], 5):  # 2 for pairs, 3 for 
-    config = list(combo)
-    # print(config)
-    output = 0
-    for i in range(0,5):
-        # print(f"execute amp {i}")
-        program = programB[:]
-        args = [config.pop(0),output]
-        output = execute(program,args)    
-    # print(output)
-    outputs.append(output)
+# for combo in itertools.permutations([5,6,7,8,9], 5):  # 2 for pairs, 3 for 
+config =  [9,8,7,6,5] # list(combo)
+# print(config)
+output = 0
+program = []
 
-print(f"Part 1: max: {max(outputs)}")
-
-
-outputs = []
-
-for combo in itertools.permutations([5,6,7,8,9], 5):  # 2 for pairs, 3 for 
-    config = list(combo)
-    print(config)
-    output = 0
-    for i in range(0,5):
-        print(f"execute amp {i}")
-        program = programB[:]
-        args = [config.pop(0),output]
-        output = execute(program,args)    
+#initial loop
+for i in range(0,5):
+    print(f"execute amp {i}")
+    program.append(programB[:])
+    args = [config.pop(0),output]
+    output = execute(program[i],args) 
     print(output)
-    outputs.append(output)
+    
+
+for i in range(0,5):
+    print(f"execute amp {i}")
+    args = [output] #  if output != -1 else []
+    print(args)
+    output = execute(program[i],args)    
+
+print(output)
+outputs.append(output)
 
 print(f"Part 2: max: {max(outputs)}")
