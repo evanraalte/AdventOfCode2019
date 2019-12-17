@@ -43,11 +43,13 @@ for orbit in unique_orbits:
     part1 += deps
 
 
-# print(f"you : {you}")
-# print(f"san : {san}")
+print(f"you : {you}")
+print(f"san : {san}")
 
-# print(f"difference : {set(san).difference(set(you))}")
-# print(f"difference : {set(you).difference(set(san))}")
+print(f"difference : {set(san).difference(set(you))}")
+print(f"difference : {set(you).difference(set(san))}")
+
+print(f"symmetric difference: {len(set(you).symmetric_difference(san))-2}") # alternative
 
 youCrossingLen = len(set(san).difference(set(you))) - 1
 sanCrossingLen = len(set(you).difference(set(san))) - 1
