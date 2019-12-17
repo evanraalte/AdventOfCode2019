@@ -15,7 +15,7 @@ def getOperands(instr,opcode,p,pc):
 
 
 
-def execute(p,args,out):
+def execute(p,args,out,pc):
     toHuman = {
         "99" : "fin",
         "01" : "add",
@@ -28,8 +28,6 @@ def execute(p,args,out):
         "08" : "eq"
     }
 
-
-    pc = 0
     done = False
     while not done:
         instr = str(p[pc]).zfill(4)
@@ -57,8 +55,8 @@ def execute(p,args,out):
         elif opcode == "jmpF":
             pc = op2 if op1 == 0 else pc + 3                
         elif opcode == "inp":
-            # if args == []:
-            #     return -1
+            if args == []: # nothing to pop, return program counter so that we can continue later..
+                return (pc,0)
             inp = args.pop(0)
             p[p[int(pc+1)]] = inp # int(input("input:"))
             # print(f"input: {inp}")
@@ -70,10 +68,11 @@ def execute(p,args,out):
         else:
             break
     if done:
-        pass
+        return (pc,1)
         # print("Finished with success")
         # print(p)
     else:
+        return (pc,-1)
         print("Finished with error")
 
 
@@ -89,44 +88,39 @@ for combo in itertools.permutations([0,1,2,3,4], 5):  # 2 for pairs, 3 for
     out = [0] # initial
     for i in range(0,5):
         program = programB[:]
+        pc = 0
         args = [config.pop(0),out.pop()]
         out = []
-        execute(program,args,out)
+        execute(program,args,out,pc)
 
     outputs.append(out.pop())
 
 print(f"Part 1: max: {max(outputs)}")
 
+outputs = []
+
+for combo in itertools.permutations([5,6,7,8,9], 5):  # 2 for pairs, 3 for 
+    config =  list(combo)
+    out = [0]
+    program = []
+    pc = []
+
+    #initial loop
+    for i in range(0,5):
+        program.append(programB[:])
+        pc.append(0)
+        args = [config.pop(0),out.pop()]
+        out = []
+        (pc[i],_) = execute(program[i],args,out,pc[i]) 
+        
+    done = 0
+    while done == 0:
+        for i in range(0,5):
+            args = [out.pop()]
+            out = []
+            (pc[i],done) = execute(program[i],args,out,pc[i])
 
 
+    outputs.append(out.pop())
 
-
-# programB =  "3,26,1001,26,-4,26,3,27,1002,27,2,27,1,27,26,27,4,27,1001,28,-1,28,1005,28,6,99,0,0,5".split(",")
-# programB = list(map(lambda x: int(x),programB))
-# outputs = []
-
-# # for combo in itertools.permutations([5,6,7,8,9], 5):  # 2 for pairs, 3 for 
-# config =  [9,8,7,6,5] # list(combo)
-# # print(config)
-# output = 0
-# program = []
-
-# #initial loop
-# for i in range(0,5):
-#     print(f"execute amp {i}")
-#     program.append(programB[:])
-#     args = [config.pop(0),output]
-#     output = execute(program[i],args) 
-#     print(output)
-    
-
-# for i in range(0,5):
-#     print(f"execute amp {i}")
-#     args = [output] #  if output != -1 else []
-#     print(args)
-#     output = execute(program[i],args)    
-
-# print(output)
-# outputs.append(output)
-
-# print(f"Part 2: max: {max(outputs)}")
+print(f"Part 2: max: {max(outputs)}")
