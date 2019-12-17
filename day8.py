@@ -19,13 +19,11 @@ part1 = layers[idx].count("1") * layers[idx].count("2")
 # print(layers[idx])
 print(part1)
 
-
 def iterate(color,colorOverlay):
     if color != 2:
         return color
     else: 
         return colorOverlay
-
 
 finalLayer = [2]*layerSize
 
