@@ -57,6 +57,7 @@ def execute(p):
             pc = op2 if op1 == 0 else pc + 3                
         elif opcode == "inp":
             p[p[int(pc+1)]] = int(input("input:"))
+            print(f"writing to: {p[int(pc+1)]}")
             pc +=2
         elif opcode == "out":
             print(f"output:{op1}")
