@@ -46,18 +46,16 @@ def intCode(inputs,outputs):
     global pc, rb
 
     done = False
+    iCnt = 0
     while not done:
+        iCnt += 1
         instr = str(read(pc)).zfill(5)      
         opcode = toHuman[instr[-2:]] 
-        print(f"{read(pc)}\t{read(pc+1)}\t{read(pc+2)}\t{read(pc+3)}")
+        # print(f"{read(pc)}\t{read(pc+1)}\t{read(pc+2)}\t{read(pc+3)}")
         p_op1,p_op2, p_op3 = getOperands(instr)
         op1 = read(p_op1)
         op2 = read(p_op2)
-        dest = p_op3 # read(pc+3)
-
-
-        # print(f"op1: {op1}/{p_op1}, op2: {op2}/{p_op2}, dest: {dest}, rb: {rb}")
-
+        dest = p_op3
         if opcode   == "fin": # instruction with no parameters
             done = True
         elif opcode == "add":
@@ -83,7 +81,7 @@ def intCode(inputs,outputs):
                 return 0
             inp = inputs.pop(0)
             write(p_op1,inp)
-            print(f"writing {inp} to addr {p_op1}, rb: {rb}")
+            # print(f"writing {inp} to addr {p_op1}, rb: {rb}")
             pc +=2
         elif opcode == "out":
             outputs.append(op1)
@@ -94,8 +92,10 @@ def intCode(inputs,outputs):
         else:
             print("Bad opcode")
             break
+    print(iCnt)
     if done:
         return 1
+        
     else:
         return -1
         print("Finished with error")
@@ -107,7 +107,7 @@ program =  f.readline().split(",")
 for index,instruction in enumerate(program):
     write(index,int(instruction))
 
-inputs = [1]
+inputs = [2]
 outputs = []
 intCode(inputs,outputs)
 print(outputs)
