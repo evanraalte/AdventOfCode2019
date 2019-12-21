@@ -1,7 +1,8 @@
 import math
 
 class Asteroid:
-    los = 0
+    numLos = 0
+    los = []
     def __init__(self,x,y):
         self.x = x
         self.y = y
@@ -21,21 +22,23 @@ def bestBaseStation(asteroids):
     best = asteroids[0]
     for base in asteroids:
         me = id(base)
-        angles = []
+        los = []
         for a in asteroids:
             if not id(a) == me:
                 dx = a.x - base.x
                 dy = a.y - base.y
                 angle = math.degrees(math.atan2(dx,dy))
-                # print(f"base ({base.x},{base.y}), a ({a.x},{a.y}) => {angle}")
-                angles.append(angle)
-        los = len(list(dict.fromkeys(angles)))
+                los.append((angle,a.x,a.y))
+
+        seen = set()
+        los = [(a,b,c) for a,b,c in los if not (a in seen or seen.add(a))]
         base.los = los
-        best = base if base.los > best.los else best
+        base.numLos = len(los)
+        best = base if base.numLos > best.numLos else best
     return best
 
 base = bestBaseStation(asteroids)
-print(f"Part 1: ({base.x},{base.y}) => {base.los}")
+print(f"Part 1: ({base.x},{base.y}) => {base.numLos}")
 
 
 # for a in asteroids:
