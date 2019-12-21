@@ -25,13 +25,15 @@ def bestBaseStation(asteroids):
         los = []
         for a in asteroids:
             if not id(a) == me:
-                dx = a.x - base.x
-                dy = a.y - base.y
+                dx = a.x - base.x 
+                dy = base.y - a.y 
                 angle = math.degrees(math.atan2(dx,dy))
+                angle = angle + 360 if angle < 0 else angle
                 los.append((angle,a.x,a.y))
 
         seen = set()
         los = [(a,b,c) for a,b,c in los if not (a in seen or seen.add(a))]
+        los = sorted(los,key = lambda x: x[0])
         base.los = los
         base.numLos = len(los)
         best = base if base.numLos > best.numLos else best
@@ -40,7 +42,7 @@ def bestBaseStation(asteroids):
 base = bestBaseStation(asteroids)
 print(f"Part 1: ({base.x},{base.y}) => {base.numLos}")
 
-
+# print(base.los)
 # for a in asteroids:
 #     if a.los == maxLos:
 #         print(f"({a.x},{a.y})")
