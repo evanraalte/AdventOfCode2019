@@ -59,7 +59,6 @@ print(f"Part 1: ({base.x},{base.y}) => {base.numLos}")
 
 
 while len(asteroids) > 1:
-    # print(len(asteroids))
     vaporize(base,asteroids)
     base.los = determineLos(base,asteroids)
     base.numLos = len(base.los)
