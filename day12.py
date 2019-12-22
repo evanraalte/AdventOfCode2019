@@ -28,10 +28,29 @@ positions = np.array(list(map(lambda x: list(map(int,re.sub("<|>| |\n|x|y|z|=","
 
 velocities = np.array([[0]*3]*4)
 
-print(positions)
-for i in range(1,1000+1):
+velocitiesInitial = velocities
+positionsInitial = positions
+
+steps = 0
+done = False
+
+perX = 0
+perY = 0
+perZ = 0
+
+while not done: 
+    done = (perX > 0) and (perY > 0) and (perZ > 0)
+
     velocities,kinetic = calc(velocities,positions)
     positions = velocities + positions
     potential = np.sum(np.abs(positions),axis=1)  
-print(f"Total energy: {np.sum(potential * kinetic)}")
+    steps += 1
 
+    perX = steps if np.all(positions[:,0] == positionsInitial[:,0]) else perX
+    perY = steps if np.all(positions[:,1] == positionsInitial[:,1]) else perY
+    perZ = steps if np.all(positions[:,2] == positionsInitial[:,2]) else perZ
+
+
+    pass
+# print(f"Total energy: {np.sum(potential * kinetic)}")
+print(f"steps: {np.lcm.reduce([perX,perY,perZ])}")
